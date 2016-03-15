@@ -5,8 +5,15 @@
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
   padding-top: 50px;
+  height: 100%;
+  width:100%;
 }
 
+/*to make the map fill out all the space in the element*/
+#map{
+  height: calc(100vh - 100px);
+  width: 100%;
+}
 
 /*
  * Global add-ons
@@ -71,6 +78,7 @@ body {
 
 .main {
   padding: 20px;
+  bottom: 0;
 }
 /*@media (min-width: 768px) {
   .main {
