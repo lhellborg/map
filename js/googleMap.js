@@ -51,21 +51,28 @@ function MapViewModel() {
     var service = new google.maps.places.PlacesService(self.map);
     var request = {placeId: 'ChIJN-CrHttRqEcRW8WVxZ0PUDk'};
 
-    service.getDetails(request,
-      function(place, status) {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          var marker = new google.maps.Marker({
-            map: self.map,
-            position: place.geometry.location
-          });
-          google.maps.event.addListener(marker, 'click', function() {
-            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
-              'Place ID: ' + place.place_id + '<br>' +
-              place.formatted_address + '</div>');
-            infowindow.open(self.map, this);
-          });
-        }
+    service.getDetails(request, callback);
+
+    function callback(results, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        createMarker(results)
+      }
+    } //end callback
+
+    function createMarker(place) {
+      var marker = new google.maps.Marker({
+        map: self.map,
+        position: place.geometry.location
       });
+
+      google.maps.event.addListener(marker, 'click', function() {
+        infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+          'Place ID: ' + place.place_id + '<br>' +
+          place.formatted_address + '</div>');
+        infowindow.open(self.map, this);
+      });
+    } //end createMarker
+
 
     // google.maps.event.addListener(marker, 'click', function() {
     //   infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
@@ -102,6 +109,7 @@ function MapViewModel() {
   // puts a marker on all the places on the map defined by the callback function
   function createMarker(place) {
     var placeLoc = place.geometry.location;
+
     var marker = new google.maps.Marker({
       map: self.map,
       position: place.geometry.location
