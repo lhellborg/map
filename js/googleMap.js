@@ -16,16 +16,16 @@ function MapViewModel() {
   self.type = "restaurant";
   self.keyword = "Fischers Fritz";
   self.infowindow;
-  self.placeId = [
-  {name: "Fischers Fritz", place_id: "ChIJN-CrHttRqEcRW8WVxZ0PUDk"},
-  {name: "Lutter & Wegner", place_id: "ChIJn3aH2MtRqEcRFCq5E46U1Zs"},
-  {name: "Maritim Hotel Berlin", place_id: "ChIJVW_VXbRRqEcROfZizUmpRGA"},
-  {name: "Brandenburger Tor", place_id: "ChIJiQnyVcZRqEcRY0xnhE77uyY"},
-  {name: "Reichstagsgebäude", place_id: "ChIJbVDuQcdRqEcR5X3xq9NSG2Q"},
-  {name: "Gendarmenmarkt", place_id: "ChIJ4ZsybtpRqEcRkDdXJvRC7Wk"},
-  {name: "Deutscher Dom", place_id: "ChIJ4ZsybtpRqEcRqBX6VAnUoAw"},
-  {name: "Kaiser-Wilhelm-Gedächtnis-Kirche", place_id: "ChIJd2v8Cf9QqEcRnLCe4snacBA"},
-  {name: "Gedenkstätte Berliner Mauer", place_id: "ChIJZ0KxF_JRqEcRrLHB-4r-U-o"}
+  self.defaultPlaces = [
+  {name: "Fischers Fritz", place_id: "ChIJN-CrHttRqEcRW8WVxZ0PUDk", type: "restaurant"},
+  {name: "Lutter & Wegner", place_id: "ChIJn3aH2MtRqEcRFCq5E46U1Zs", type: "restaurant"},
+  {name: "Maritim Hotel Berlin", place_id: "ChIJVW_VXbRRqEcROfZizUmpRGA", type: "hotel"},
+  {name: "Brandenburger Tor", place_id: "ChIJiQnyVcZRqEcRY0xnhE77uyY", type: "establishment"},
+  {name: "Reichstagsgebäude", place_id: "ChIJbVDuQcdRqEcR5X3xq9NSG2Q", type: "establishment"},
+  {name: "Gendarmenmarkt", place_id: "ChIJ4ZsybtpRqEcRkDdXJvRC7Wk", type: "establishment"},
+  {name: "Deutscher Dom", place_id: "ChIJ4ZsybtpRqEcRqBX6VAnUoAw", type: "church"},
+  {name: "Kaiser-Wilhelm-Gedächtnis-Kirche", place_id: "ChIJd2v8Cf9QqEcRnLCe4snacBA", type: "church"},
+  {name: "Gedenkstätte Berliner Mauer", place_id: "ChIJZ0KxF_JRqEcRrLHB-4r-U-o", type: "establishment"}
   ];
 
   // available types to search for in the filter menu preferably from the server
@@ -47,18 +47,46 @@ function MapViewModel() {
       zoom: 14
     });
 
-    infowindow = new google.maps.InfoWindow();
+    var infowindow = new google.maps.InfoWindow();
+    var service = new google.maps.places.PlacesService(self.map);
+    var request = {placeId: 'ChIJN-CrHttRqEcRW8WVxZ0PUDk'};
+
+    service.getDetails(request,
+      function(place, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          var marker = new google.maps.Marker({
+            map: self.map,
+            position: place.geometry.location
+          });
+          google.maps.event.addListener(marker, 'click', function() {
+            infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+              'Place ID: ' + place.place_id + '<br>' +
+              place.formatted_address + '</div>');
+            infowindow.open(self.map, this);
+          });
+        }
+      });
+
+    // google.maps.event.addListener(marker, 'click', function() {
+    //   infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
+    //     'Place ID: ' + place.place_id + '<br>' +
+    //     place.formatted_address + '</div>');
+    //   infowindow.open(self.map, this);
+    // });
+
+
     // A Places Nearby search is initiated with a call to the PlacesService's nearbySearch() method,
     // which will return an array of PlaceResult objects.
-    var service = new google.maps.places.PlacesService(self.map, self.type, self.keyword);
     // A Nearby Search lets you search for places within a specified area by keyword or type
 
-    service.nearbySearch({
-      location: berlin,
-      radius: 1000,
-      keyword: self.keyword,
-      type: [self.type]
-    }, callback);
+    // var request = {
+    //   location: berlin,
+    //   radius: 1000,
+    //   keyword: self.keyword,
+    //   type: [self.type]
+    // };
+    // service.nearbySearch(request, callback);
+
   } //end initMap
 
   // loop over the PlaceResult array from nearbySearch and calls the createMarker function
@@ -85,7 +113,7 @@ function MapViewModel() {
       infowindow.open(self.map, this);
     });
   } //end createMarker
-}
+} //end MapViewModel
 
 var model = new MapViewModel();
 
