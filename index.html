@@ -62,7 +62,7 @@
 
         <div class="col-xs-5 col-sm-3 col-md-2 sidebar">
           <form >
-            <input class="form-control" data-bind="value: lookUp"></input>
+            <select class="form-control" data-bind="options: $root.availableTypes, value: lookUp, optionsText: 'type'"></select>
           </form>
           <ul class="nav nav-sidebar">
             <li class="active"><a href="#">Overview</a></li>

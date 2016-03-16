@@ -15,9 +15,13 @@ function MapViewModel() {
   self.map;
   self.infowindow;
   // available types to search for in the filter menu preferably from the server
-  self.availableTypes = ["train_station", "church", "store"];
+  self.availableTypes = ko.observableArray([
+    {type: "train_station"},
+    {type: "church"},
+    {type: "store"}
+    ]);
 
-  self.lookUp = ko.observable("train_station");
+  self.lookUp = ko.observable(new mapData(self.availableTypes[0]));
 
   // Puts a map in the map div, with specified lat and long
   self.initMap=function() {
