@@ -17,15 +17,15 @@ function MapViewModel() {
   self.keyword = "Fischers Fritz";
   self.infowindow;
   self.defaultPlaces = [
-  {name: "Fischers Fritz", place_id: "ChIJN-CrHttRqEcRW8WVxZ0PUDk", type: "restaurant"},
-  {name: "Lutter & Wegner", place_id: "ChIJn3aH2MtRqEcRFCq5E46U1Zs", type: "restaurant"},
-  {name: "Maritim Hotel Berlin", place_id: "ChIJVW_VXbRRqEcROfZizUmpRGA", type: "hotel"},
-  {name: "Brandenburger Tor", place_id: "ChIJiQnyVcZRqEcRY0xnhE77uyY", type: "establishment"},
-  {name: "Reichstagsgebäude", place_id: "ChIJbVDuQcdRqEcR5X3xq9NSG2Q", type: "establishment"},
-  {name: "Gendarmenmarkt", place_id: "ChIJ4ZsybtpRqEcRkDdXJvRC7Wk", type: "establishment"},
-  {name: "Deutscher Dom", place_id: "ChIJ4ZsybtpRqEcRqBX6VAnUoAw", type: "church"},
-  {name: "Kaiser-Wilhelm-Gedächtnis-Kirche", place_id: "ChIJd2v8Cf9QqEcRnLCe4snacBA", type: "church"},
-  {name: "Gedenkstätte Berliner Mauer", place_id: "ChIJZ0KxF_JRqEcRrLHB-4r-U-o", type: "establishment"}
+  {name: "Fischers Fritz", placeId: "ChIJN-CrHttRqEcRW8WVxZ0PUDk", type: "restaurant"},
+  {name: "Lutter & Wegner", placeId: "ChIJn3aH2MtRqEcRFCq5E46U1Zs", type: "restaurant"},
+  {name: "Maritim Hotel Berlin", placeId: "ChIJVW_VXbRRqEcROfZizUmpRGA", type: "hotel"},
+  {name: "Brandenburger Tor", placeId: "ChIJiQnyVcZRqEcRY0xnhE77uyY", type: "establishment"},
+  {name: "Reichstagsgebäude", placeId: "ChIJbVDuQcdRqEcR5X3xq9NSG2Q", type: "establishment"},
+  {name: "Gendarmenmarkt", placeId: "ChIJ4ZsybtpRqEcRkDdXJvRC7Wk", type: "establishment"},
+  {name: "Deutscher Dom", placeId: "ChIJ4ZsybtpRqEcRqBX6VAnUoAw", type: "church"},
+  {name: "Kaiser-Wilhelm-Gedächtnis-Kirche", placeId: "ChIJd2v8Cf9QqEcRnLCe4snacBA", type: "church"},
+  {name: "Gedenkstätte Berliner Mauer", placeId: "ChIJZ0KxF_JRqEcRrLHB-4r-U-o", type: "establishment"}
   ];
 
   // available types to search for in the filter menu preferably from the server
@@ -49,13 +49,19 @@ function MapViewModel() {
 
     var infowindow = new google.maps.InfoWindow();
     var service = new google.maps.places.PlacesService(self.map);
-    var request = {placeId: 'ChIJN-CrHttRqEcRW8WVxZ0PUDk'};
+    var requests = [
+    {placeId: 'ChIJN-CrHttRqEcRW8WVxZ0PUDk'},
+    {placeId: 'ChIJn3aH2MtRqEcRFCq5E46U1Zs'}
+    ];
 
-    service.getDetails(request, callback);
+    for (var i = 0; i < self.defaultPlaces.length; i++) {
+      service.getDetails(requests[i], callback);
+    }
 
-    function callback(results, status) {
+    function callback(request, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
-        createMarker(results)
+        createMarker(request);
+        console.log(request);
       }
     } //end callback
 
