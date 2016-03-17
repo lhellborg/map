@@ -109,3 +109,7 @@ body {
   display: inline-block;
   border-radius: 50%;
 }
+
+#icon {
+  height: 20px;
+}

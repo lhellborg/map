@@ -1,14 +1,14 @@
 // the initial places
 var initialPlaces = [
-  {name: "Fischers Fritz", place_id: "ChIJN-CrHttRqEcRW8WVxZ0PUDk", type: "restaurant", formatted_address: "Charlottenstraße 49, 10117 Berlin, Tyskland"},
-  {name: "Lutter & Wegner", place_id: "ChIJn3aH2MtRqEcRFCq5E46U1Zs", type: "restaurant", formatted_address: "Weinhaus Huth, Alte Potsdamer Str. 5, 10785 Berlin, Tyskland"},
-  {name: "Maritim Hotel Berlin", place_id: "ChIJVW_VXbRRqEcROfZizUmpRGA", type: "hotel", formatted_address: "Stauffenbergstraße 26, 10785 Berlin, Tyskland"},
-  {name: "Brandenburger Tor", place_id: "ChIJiQnyVcZRqEcRY0xnhE77uyY", type: "establishment", formatted_address: "Pariser Platz, 10117 Berlin, Tyskland"},
-  {name: "Reichstagsgebäude", place_id: "ChIJbVDuQcdRqEcR5X3xq9NSG2Q", type: "establishment", formatted_address: "Platz der Republik 1, 11011 Berlin, Tyskland"},
-  {name: "Gendarmenmarkt", place_id: "ChIJ4ZsybtpRqEcRkDdXJvRC7Wk", type: "establishment", formatted_address: "Gendarmenmarkt, 10117 Berlin, Tyskland"},
-  {name: "Deutscher Dom", place_id: "ChIJ4ZsybtpRqEcRqBX6VAnUoAw", type: "church", formatted_address: "Gendarmenmarkt 1-2, 10117 Berlin, Tyskland"},
-  {name: "Kaiser-Wilhelm-Gedächtnis-Kirche", place_id: "ChIJd2v8Cf9QqEcRnLCe4snacBA", type: "church", formatted_address: "Breitscheidplatz, 10789 Berlin, Tyskland"},
-  {name: "Gedenkstätte Berliner Mauer", place_id: "ChIJZ0KxF_JRqEcRrLHB-4r-U-o", type: "establishment", formatted_address: "Bernauer Str. 111, 13355 Berlin, Tyskland"}
+  {name: "Fischers Fritz", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", place_id: "ChIJN-CrHttRqEcRW8WVxZ0PUDk", type: "restaurant", formatted_address: "Charlottenstraße 49, 10117 Berlin, Tyskland"},
+  {name: "Lutter & Wegner", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", place_id: "ChIJn3aH2MtRqEcRFCq5E46U1Zs", type: "restaurant", formatted_address: "Weinhaus Huth, Alte Potsdamer Str. 5, 10785 Berlin, Tyskland"},
+  {name: "Maritim Hotel Berlin", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/lodging-71.png", place_id: "ChIJVW_VXbRRqEcROfZizUmpRGA", type: "hotel", formatted_address: "Stauffenbergstraße 26, 10785 Berlin, Tyskland"},
+  {name: "Brandenburger Tor", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png", place_id: "ChIJiQnyVcZRqEcRY0xnhE77uyY", type: "establishment", formatted_address: "Pariser Platz, 10117 Berlin, Tyskland"},
+  {name: "Reichstagsgebäude", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/civic_building-71.png", place_id: "ChIJbVDuQcdRqEcR5X3xq9NSG2Q", type: "establishment", formatted_address: "Platz der Republik 1, 11011 Berlin, Tyskland"},
+  {name: "Gendarmenmarkt", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png", place_id: "ChIJ4ZsybtpRqEcRkDdXJvRC7Wk", type: "establishment", formatted_address: "Gendarmenmarkt, 10117 Berlin, Tyskland"},
+  {name: "Deutscher Dom", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/worship_general-71.png", place_id: "ChIJ4ZsybtpRqEcRqBX6VAnUoAw", type: "church", formatted_address: "Gendarmenmarkt 1-2, 10117 Berlin, Tyskland"},
+  {name: "Kaiser-Wilhelm-Gedächtnis-Kirche", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/worship_general-71.png", place_id: "ChIJd2v8Cf9QqEcRnLCe4snacBA", type: "church", formatted_address: "Breitscheidplatz, 10789 Berlin, Tyskland"},
+  {name: "Gedenkstätte Berliner Mauer", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/generic_recreational-71.png", place_id: "ChIJZ0KxF_JRqEcRrLHB-4r-U-o", type: "establishment", formatted_address: "Bernauer Str. 111, 13355 Berlin, Tyskland"}
 ];
 
 // available types to search for in the filter menu preferably from the server
@@ -26,6 +26,8 @@ var MapData = function(initialData) {
   self.name = initialData.name;
   self.type = initialData.type;
   self.formatted_address = initialData.formatted_address;
+  self.icon = initialData.icon;
+  self.marker=initialData.marker;
 };
 
 var Types = function(dataTypes) {
@@ -69,7 +71,7 @@ function MapViewModel() {
 
     for (var i = 0; i < self.placeList().length; i++) {
       var onePlace = self.placeList()[i];
-
+      //for each onePlace we will add the corresponding marker with an "iffy" callback
       self.service.getDetails(onePlace, makeCallback(onePlace));
     }
   } //end initMap
@@ -94,9 +96,10 @@ function MapViewModel() {
   } //end createMarker
 
   addPins = function(place, marker) {
+    console.log(place);
     google.maps.event.addListener(marker, 'click', function() {
       self.infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
-        place.formatted_address + '</div>');
+        '<img id="icon" src=' + place.icon + '></div>');
       self.infowindow.open(self.map, this);
     });
   };
@@ -123,9 +126,11 @@ function MapViewModel() {
 
   // when an list item is clicked make an infoWindow in the map
   self.currentPlace.subscribe(function(selectedPlace) {
+    console.log("selectedPlace");
     console.log(selectedPlace);
+
     self.infowindow.setContent('<div><strong>' + selectedPlace.name + '</strong><br>' +
-        selectedPlace.formatted_address + '</div>');
+        '<img id="icon" src=' + selectedPlace.icon + '></div>');
     self.infowindow.open(self.map, selectedPlace.marker);
   });
 
@@ -151,13 +156,15 @@ function MapViewModel() {
     self.service.nearbySearch(request, callbackFilter);
   };
 
-  // callback funciton to the filter function. Takes the result as an array
+  // callback function to the filter function. Takes the result as an array
   function callbackFilter(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
       for (var i = 0; i < results.length; i++) {
         var place = results[i];
-        createMarker(results[i]);
-        self.placeList.push(new MapData(results[i]));
+        place.marker = createMarker(results[i]);
+        console.log(place);
+        console.log(place.marker);
+        self.placeList.push(new MapData(place));
       }
     }
   } //end callbackFilter
