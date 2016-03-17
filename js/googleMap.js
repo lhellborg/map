@@ -13,7 +13,7 @@ var initialPlaces = [
 
 // available types to search for in the filter menu preferably from the server
 var availableTypes = [
-  {name: "nothing", type: ""},
+  {name: "default from google", type: ""},
   {name: "Train stations", type: "train_station"},
   {name: "Churches", type: "church"},
   {name: "Stores", type: "store"}
@@ -106,6 +106,8 @@ function MapViewModel() {
   // filter the markers on the map with the selectedType and
   // update the placeList with the new places
   self.selectedType.subscribe(function(newValue) {
+    //empty the self.placeList array
+    self.placeList().length = 0;
     filter(newValue.type);
   });
 
