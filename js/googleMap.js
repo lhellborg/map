@@ -1,14 +1,14 @@
 // the initial places
 var initialPlaces = [
-  {name: "Fischers Fritz", placeId: "ChIJN-CrHttRqEcRW8WVxZ0PUDk", type: "restaurant"},
-  {name: "Lutter & Wegner", placeId: "ChIJn3aH2MtRqEcRFCq5E46U1Zs", type: "restaurant"},
-  {name: "Maritim Hotel Berlin", placeId: "ChIJVW_VXbRRqEcROfZizUmpRGA", type: "hotel"},
-  {name: "Brandenburger Tor", placeId: "ChIJiQnyVcZRqEcRY0xnhE77uyY", type: "establishment"},
-  {name: "Reichstagsgebäude", placeId: "ChIJbVDuQcdRqEcR5X3xq9NSG2Q", type: "establishment"},
-  {name: "Gendarmenmarkt", placeId: "ChIJ4ZsybtpRqEcRkDdXJvRC7Wk", type: "establishment"},
-  {name: "Deutscher Dom", placeId: "ChIJ4ZsybtpRqEcRqBX6VAnUoAw", type: "church"},
-  {name: "Kaiser-Wilhelm-Gedächtnis-Kirche", placeId: "ChIJd2v8Cf9QqEcRnLCe4snacBA", type: "church"},
-  {name: "Gedenkstätte Berliner Mauer", placeId: "ChIJZ0KxF_JRqEcRrLHB-4r-U-o", type: "establishment"}
+  {name: "Fischers Fritz", place_id: "ChIJN-CrHttRqEcRW8WVxZ0PUDk", type: "restaurant"},
+  {name: "Lutter & Wegner", place_id: "ChIJn3aH2MtRqEcRFCq5E46U1Zs", type: "restaurant"},
+  {name: "Maritim Hotel Berlin", place_id: "ChIJVW_VXbRRqEcROfZizUmpRGA", type: "hotel"},
+  {name: "Brandenburger Tor", place_id: "ChIJiQnyVcZRqEcRY0xnhE77uyY", type: "establishment"},
+  {name: "Reichstagsgebäude", place_id: "ChIJbVDuQcdRqEcR5X3xq9NSG2Q", type: "establishment"},
+  {name: "Gendarmenmarkt", place_id: "ChIJ4ZsybtpRqEcRkDdXJvRC7Wk", type: "establishment"},
+  {name: "Deutscher Dom", place_id: "ChIJ4ZsybtpRqEcRqBX6VAnUoAw", type: "church"},
+  {name: "Kaiser-Wilhelm-Gedächtnis-Kirche", place_id: "ChIJd2v8Cf9QqEcRnLCe4snacBA", type: "church"},
+  {name: "Gedenkstätte Berliner Mauer", place_id: "ChIJZ0KxF_JRqEcRrLHB-4r-U-o", type: "establishment"}
 ];
 
 // available types to search for in the filter menu preferably from the server
@@ -22,7 +22,7 @@ var availableTypes = [
 // the data for the map
 var MapData = function(initialData) {
   var self = this;
-  self.placeId = initialData.placeId;
+  self.placeId = initialData.place_id;
   self.name = ko.observable(initialData.name);
   self.type = ko.observable(initialData.type);
 };
@@ -40,7 +40,7 @@ function MapViewModel() {
   self.placeList = ko.observableArray([]);
 
   initialPlaces.forEach(function(placeItem) {
-    self.placeList.push(new MapData(placeItem))
+    self.placeList.push(new MapData(placeItem));
   });
 
 
@@ -74,7 +74,7 @@ function MapViewModel() {
   function callback(request, status) {
     if (status === google.maps.places.PlacesServiceStatus.OK) {
       createMarker(request);
-      console.log(request);
+      // console.log(request);
     }
   } //end callback
 
@@ -97,21 +97,24 @@ function MapViewModel() {
 
   self.typeList = ko.observableArray([]);
 
+  // noneditable data of types to be filtered
   availableTypes.forEach(function(typeItem) {
     self.typeList.push(new Types(typeItem))
   });
 
   self.selectedType = ko.observable();
+  // filter the markers on the map with the selectedType and
+  // update the placeList with the new places
   self.selectedType.subscribe(function(newValue) {
-    self.filter(newValue.type);
-  })
+    filter(newValue.type);
+  });
 
 
 
     // A Places Nearby search is initiated with a call to the PlacesService's nearbySearch() method,
     // which will return an array of PlaceResult objects.
     // A Nearby Search lets you search for places within a specified area by keyword or type
-  self.filter = function(type) {
+  function filter(type) {
     // to delete the current markers on the map witout loading the map again
     clearMarkers();
 
@@ -135,6 +138,8 @@ function MapViewModel() {
       for (var i = 0; i < results.length; i++) {
         var place = results[i];
         createMarker(results[i]);
+        console.log(results[i]);
+        self.placeList.push(new MapData(results[i]));
       }
     }
   } //end callbackFilter
