@@ -16,6 +16,7 @@ function MapData(initialData) {
   var self = this;
   self.placeId = initialData.placeId;
   self.name = ko.observable(initialData.name);
+  self.type = ko.observable(initialData.type);
 };
 
 // Overall viewmodel for the map with a init function
@@ -35,23 +36,14 @@ function MapViewModel() {
   self.map;
   self.infowindow;
   self.service;
-
-  // available types to search for in the filter menu preferably from the server
-  self.availableTypes = [
-    {name: "Train stations", type: "train_station"},
-    {name: "Churches", type: "church"},
-    {name: "Stores", type: "store"}
-    ];
-
-  self.lookUp = ko.observable(self.availableTypes[0].type);
+  self.location = {lat: 52.51, lng: 13.38};
 
 
   // Puts a map in the map div, with specified lat and long
   self.initMap=function() {
-    var berlin = {lat: 52.51, lng: 13.38};
 
     self.map = new google.maps.Map(document.getElementById('map'), {
-      center: berlin,
+      center: self.location,
       zoom: 14
     });
 
@@ -84,17 +76,48 @@ function MapViewModel() {
     });
   } //end createMarker
 
+
+    // available types to search for in the filter menu preferably from the server
+  self.availableTypes = [
+    {name: "nothing is filtered", type: ""},
+    {name: "Train stations", type: "train_station"},
+    {name: "Churches", type: "church"},
+    {name: "Stores", type: "store"}
+    ];
+
+  self.lookUp = ko.observable(self.availableTypes[0].type);
+  console.log(self.lookUp())
+
     // A Places Nearby search is initiated with a call to the PlacesService's nearbySearch() method,
     // which will return an array of PlaceResult objects.
     // A Nearby Search lets you search for places within a specified area by keyword or type
+  self.filter = function() {
 
-    // var request = {
-    //   location: berlin,
-    //   radius: 1000,
-    //   keyword: self.keyword,
-    //   type: [self.type]
-    // };
-    // service.nearbySearch(request, callback);
+    self.map = new google.maps.Map(document.getElementById('map'), {
+      center: self.location,
+      zoom: 14
+    });
+
+    self.infowindow = new google.maps.InfoWindow();
+    self.service = new google.maps.places.PlacesService(self.map);
+
+    var request = {
+      location: self.location,
+      radius: 1000,
+      type: [self.lookUp]
+    };
+
+    self.service.nearbySearch(request, callbackFilter);
+  };
+
+  function callbackFilter(results, status) {
+  if (status == google.maps.places.PlacesServiceStatus.OK) {
+    for (var i = 0; i < results.length; i++) {
+      var place = results[i];
+      createMarker(results[i]);
+    }
+  }
+}
 
 
 } //end MapViewModel
