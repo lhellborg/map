@@ -96,7 +96,6 @@ function MapViewModel() {
   } //end createMarker
 
   addPins = function(place, marker) {
-    console.log(place);
     google.maps.event.addListener(marker, 'click', function() {
       self.infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
         '<img id="icon" src=' + place.icon + '></div>');
@@ -126,9 +125,6 @@ function MapViewModel() {
 
   // when an list item is clicked make an infoWindow in the map
   self.currentPlace.subscribe(function(selectedPlace) {
-    console.log("selectedPlace");
-    console.log(selectedPlace);
-
     self.infowindow.setContent('<div><strong>' + selectedPlace.name + '</strong><br>' +
         '<img id="icon" src=' + selectedPlace.icon + '></div>');
     self.infowindow.open(self.map, selectedPlace.marker);
@@ -162,8 +158,6 @@ function MapViewModel() {
       for (var i = 0; i < results.length; i++) {
         var place = results[i];
         place.marker = createMarker(results[i]);
-        console.log(place);
-        console.log(place.marker);
         self.placeList.push(new MapData(place));
       }
     }
@@ -171,7 +165,6 @@ function MapViewModel() {
 
   // Sets the map on all markers in the array.
   function setMapOnAll(map) {
-    console.log(self.markers);
     for (var i = 0; i < self.markers.length; i++) {
       self.markers[i].setMap(map);
     }
