@@ -1,14 +1,14 @@
 // the initial places
 var initialPlaces = [
-  {name: "Fischers Fritz", place_id: "ChIJN-CrHttRqEcRW8WVxZ0PUDk", type: "restaurant"},
-  {name: "Lutter & Wegner", place_id: "ChIJn3aH2MtRqEcRFCq5E46U1Zs", type: "restaurant"},
-  {name: "Maritim Hotel Berlin", place_id: "ChIJVW_VXbRRqEcROfZizUmpRGA", type: "hotel"},
-  {name: "Brandenburger Tor", place_id: "ChIJiQnyVcZRqEcRY0xnhE77uyY", type: "establishment"},
-  {name: "Reichstagsgebäude", place_id: "ChIJbVDuQcdRqEcR5X3xq9NSG2Q", type: "establishment"},
-  {name: "Gendarmenmarkt", place_id: "ChIJ4ZsybtpRqEcRkDdXJvRC7Wk", type: "establishment"},
-  {name: "Deutscher Dom", place_id: "ChIJ4ZsybtpRqEcRqBX6VAnUoAw", type: "church"},
-  {name: "Kaiser-Wilhelm-Gedächtnis-Kirche", place_id: "ChIJd2v8Cf9QqEcRnLCe4snacBA", type: "church"},
-  {name: "Gedenkstätte Berliner Mauer", place_id: "ChIJZ0KxF_JRqEcRrLHB-4r-U-o", type: "establishment"}
+  {name: "Fischers Fritz", place_id: "ChIJN-CrHttRqEcRW8WVxZ0PUDk", type: "restaurant", formatted_address: "Charlottenstraße 49, 10117 Berlin, Tyskland"},
+  {name: "Lutter & Wegner", place_id: "ChIJn3aH2MtRqEcRFCq5E46U1Zs", type: "restaurant", formatted_address: "Weinhaus Huth, Alte Potsdamer Str. 5, 10785 Berlin, Tyskland"},
+  {name: "Maritim Hotel Berlin", place_id: "ChIJVW_VXbRRqEcROfZizUmpRGA", type: "hotel", formatted_address: "Stauffenbergstraße 26, 10785 Berlin, Tyskland"},
+  {name: "Brandenburger Tor", place_id: "ChIJiQnyVcZRqEcRY0xnhE77uyY", type: "establishment", formatted_address: "Pariser Platz, 10117 Berlin, Tyskland"},
+  {name: "Reichstagsgebäude", place_id: "ChIJbVDuQcdRqEcR5X3xq9NSG2Q", type: "establishment", formatted_address: "Platz der Republik 1, 11011 Berlin, Tyskland"},
+  {name: "Gendarmenmarkt", place_id: "ChIJ4ZsybtpRqEcRkDdXJvRC7Wk", type: "establishment", formatted_address: "Gendarmenmarkt, 10117 Berlin, Tyskland"},
+  {name: "Deutscher Dom", place_id: "ChIJ4ZsybtpRqEcRqBX6VAnUoAw", type: "church", formatted_address: "Gendarmenmarkt 1-2, 10117 Berlin, Tyskland"},
+  {name: "Kaiser-Wilhelm-Gedächtnis-Kirche", place_id: "ChIJd2v8Cf9QqEcRnLCe4snacBA", type: "church", formatted_address: "Breitscheidplatz, 10789 Berlin, Tyskland"},
+  {name: "Gedenkstätte Berliner Mauer", place_id: "ChIJZ0KxF_JRqEcRrLHB-4r-U-o", type: "establishment", formatted_address: "Bernauer Str. 111, 13355 Berlin, Tyskland"}
 ];
 
 // available types to search for in the filter menu preferably from the server
@@ -23,8 +23,9 @@ var availableTypes = [
 var MapData = function(initialData) {
   var self = this;
   self.placeId = initialData.place_id;
-  self.name = ko.observable(initialData.name);
-  self.type = ko.observable(initialData.type);
+  self.name = initialData.name;
+  self.type = initialData.type;
+  self.formatted_address = initialData.formatted_address;
 };
 
 var Types = function(dataTypes) {
@@ -52,6 +53,7 @@ function MapViewModel() {
   self.infowindow;
   self.service;
   self.location = {lat: 52.51, lng: 13.38};
+  self.marker;
   self.markers = [];
 
 
@@ -60,7 +62,7 @@ function MapViewModel() {
 
     self.map = new google.maps.Map(document.getElementById('map'), {
       center: self.location,
-      zoom: 14
+      zoom: 13
     });
 
     self.infowindow = new google.maps.InfoWindow();
@@ -79,22 +81,30 @@ function MapViewModel() {
   } //end callback
 
   function createMarker(place) {
-    var marker = new google.maps.Marker({
+    self.marker = new google.maps.Marker({
       map: self.map,
       position: place.geometry.location
     });
+    console.log(self.marker);
+    console.log(place);
     //push the marker to the markers array to ba able to take them away before loading new markers
-    self.markers.push(marker);
+    self.markers.push(self.marker);
+    addPins(place);
 
-    google.maps.event.addListener(marker, 'click', function() {
+  } //end createMarker
+
+  addPins = function(place) {
+    google.maps.event.addListener(self.marker, 'click', function() {
+      console.log(self.marker)
+      console.log(place)
       self.infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
-        'Place ID: ' + place.place_id + '<br>' +
         place.formatted_address + '</div>');
       self.infowindow.open(self.map, this);
     });
-  } //end createMarker
+  };
 
 
+  // the list of types to be filtered
   self.typeList = ko.observableArray([]);
 
   // noneditable data of types to be filtered
@@ -105,12 +115,22 @@ function MapViewModel() {
   self.selectedType = ko.observable();
   // filter the markers on the map with the selectedType and
   // update the placeList with the new places
-  self.selectedType.subscribe(function(newValue) {
+  self.selectedType.subscribe(function(newType) {
     //empty the self.placeList array
     self.placeList().length = 0;
-    filter(newValue.type);
+    filter(newType.type);
   });
 
+  //the clicked list item
+  self.currentPlace = ko.observable();
+
+  // when an list item is clicked make an infoWindow in the map
+  self.currentPlace.subscribe(function(selectedPlace) {
+    console.log(selectedPlace);
+    self.infowindow.setContent('<div><strong>' + selectedPlace.name + '</strong><br>' +
+        selectedPlace.formatted_address + '</div>');
+    self.infowindow.open(self.map, this);
+  });
 
 
     // A Places Nearby search is initiated with a call to the PlacesService's nearbySearch() method,
@@ -140,7 +160,6 @@ function MapViewModel() {
       for (var i = 0; i < results.length; i++) {
         var place = results[i];
         createMarker(results[i]);
-        console.log(results[i]);
         self.placeList.push(new MapData(results[i]));
       }
     }
@@ -148,14 +167,16 @@ function MapViewModel() {
 
   // Sets the map on all markers in the array.
   function setMapOnAll(map) {
+    console.log(self.markers);
     for (var i = 0; i < self.markers.length; i++) {
       self.markers[i].setMap(map);
     }
   } //end setMapOnAll
 
-  // Removes the markers from the map, but keeps them in the array.
+  // Removes the markers from the map, and delete them from the marker array.
   function clearMarkers() {
     setMapOnAll(null);
+    self.markers = [];
   }
 
 
