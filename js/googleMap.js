@@ -53,7 +53,6 @@ function MapViewModel() {
   self.infowindow;
   self.service;
   self.location = {lat: 52.51, lng: 13.38};
-  self.marker;
   self.markers = [];
 
 
@@ -69,40 +68,38 @@ function MapViewModel() {
     self.service = new google.maps.places.PlacesService(self.map);
 
     for (var i = 0; i < self.placeList().length; i++) {
-      self.service.getDetails(self.placeList()[i], callback);
+      var onePlace = self.placeList()[i];
+
+      self.service.getDetails(onePlace, makeCallback(onePlace));
     }
   } //end initMap
 
-  function callback(request, status) {
-    if (status === google.maps.places.PlacesServiceStatus.OK) {
-      createMarker(request);
-      // console.log(request);
-    }
-  } //end callback
+  function makeCallback(myPlace) {
+    return function callback(place, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        myPlace.marker = createMarker(place);
+      }
+    } //end callback
+  } // end makeCallback
 
   function createMarker(place) {
-    self.marker = new google.maps.Marker({
+    var marker = new google.maps.Marker({
       map: self.map,
       position: place.geometry.location
     });
-    console.log(self.marker);
-    console.log(place);
     //push the marker to the markers array to ba able to take them away before loading new markers
-    self.markers.push(self.marker);
-    addPins(place);
-
+    self.markers.push(marker);
+    addPins(place, marker);
+    return marker;
   } //end createMarker
 
-  addPins = function(place) {
-    google.maps.event.addListener(self.marker, 'click', function() {
-      console.log(self.marker)
-      console.log(place)
+  addPins = function(place, marker) {
+    google.maps.event.addListener(marker, 'click', function() {
       self.infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
         place.formatted_address + '</div>');
       self.infowindow.open(self.map, this);
     });
   };
-
 
   // the list of types to be filtered
   self.typeList = ko.observableArray([]);
@@ -129,7 +126,7 @@ function MapViewModel() {
     console.log(selectedPlace);
     self.infowindow.setContent('<div><strong>' + selectedPlace.name + '</strong><br>' +
         selectedPlace.formatted_address + '</div>');
-    self.infowindow.open(self.map, this);
+    self.infowindow.open(self.map, selectedPlace.marker);
   });
 
 
