@@ -11,13 +11,6 @@ var initialPlaces = [
   {name: "Gedenkstätte Berliner Mauer", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/generic_recreational-71.png", place_id: "ChIJZ0KxF_JRqEcRrLHB-4r-U-o", type: "establishment", formatted_address: "Bernauer Str. 111, 13355 Berlin, Tyskland"}
 ];
 
-// available types to search for in the filter menu preferably from the server
-var availableTypes = [
-  {name: "default from google", type: ""},
-  {name: "Train stations", type: "train_station"},
-  {name: "Churches", type: "church"},
-  {name: "Stores", type: "store"}
-];
 
 // the data for the map
 var MapData = function(initialData) {
