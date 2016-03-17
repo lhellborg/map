@@ -65,7 +65,7 @@
 
         <div class="col-xs-5 col-sm-3 col-md-2 sidebar">
           <form >
-            <select class="form-control" data-bind="options: availableTypes, value: 'type', optionsText: 'name'"></select>
+            <select class="form-control" data-bind="options: availableTypes, optionsText: 'name', value: selectedType, optionsCaption: 'Filter...'"></select>
           </form>
           <ul class="nav nav-sidebar" data-bind="foreach: placeList">
             <li ><a href="#" data-bind="text: name"></a></li>

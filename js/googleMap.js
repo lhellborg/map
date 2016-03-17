@@ -9,14 +9,28 @@ var initialPlaces = [
   {name: "Deutscher Dom", placeId: "ChIJ4ZsybtpRqEcRqBX6VAnUoAw", type: "church"},
   {name: "Kaiser-Wilhelm-Gedächtnis-Kirche", placeId: "ChIJd2v8Cf9QqEcRnLCe4snacBA", type: "church"},
   {name: "Gedenkstätte Berliner Mauer", placeId: "ChIJZ0KxF_JRqEcRrLHB-4r-U-o", type: "establishment"}
-  ];
+];
+
+// available types to search for in the filter menu preferably from the server
+var availableTypes = [
+  {name: "nothing", type: ""},
+  {name: "Train stations", type: "train_station"},
+  {name: "Churches", type: "church"},
+  {name: "Stores", type: "store"}
+];
 
 // the data for the map
-function MapData(initialData) {
+var MapData = function(initialData) {
   var self = this;
   self.placeId = initialData.placeId;
   self.name = ko.observable(initialData.name);
   self.type = ko.observable(initialData.type);
+};
+
+var Types = function(dataTypes) {
+  var self = this;
+  self.name = dataTypes.name;
+  self.type = dataTypes.type;
 };
 
 // Overall viewmodel for the map with a init function
@@ -29,6 +43,7 @@ function MapViewModel() {
     self.placeList.push(new MapData(placeItem))
   });
 
+
   // This example requires the Places library. Include the libraries=places
   // parameter when you first load the API. For example:
   // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
@@ -37,6 +52,7 @@ function MapViewModel() {
   self.infowindow;
   self.service;
   self.location = {lat: 52.51, lng: 13.38};
+  self.markers = [];
 
 
   // Puts a map in the map div, with specified lat and long
@@ -67,6 +83,8 @@ function MapViewModel() {
       map: self.map,
       position: place.geometry.location
     });
+    //push the marker to the markers array to ba able to take them away before loading new markers
+    self.markers.push(marker);
 
     google.maps.event.addListener(marker, 'click', function() {
       self.infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
@@ -77,47 +95,61 @@ function MapViewModel() {
   } //end createMarker
 
 
-    // available types to search for in the filter menu preferably from the server
-  self.availableTypes = [
-    {name: "nothing is filtered", type: ""},
-    {name: "Train stations", type: "train_station"},
-    {name: "Churches", type: "church"},
-    {name: "Stores", type: "store"}
-    ];
+  self.typeList = ko.observableArray([]);
 
-  self.lookUp = ko.observable(self.availableTypes[0].type);
-  console.log(self.lookUp())
+  availableTypes.forEach(function(typeItem) {
+    self.typeList.push(new Types(typeItem))
+  });
+
+  self.selectedType = ko.observable();
+  self.selectedType.subscribe(function(newValue) {
+    self.filter(newValue.type);
+  })
+
+
 
     // A Places Nearby search is initiated with a call to the PlacesService's nearbySearch() method,
     // which will return an array of PlaceResult objects.
     // A Nearby Search lets you search for places within a specified area by keyword or type
-  self.filter = function() {
+  self.filter = function(type) {
+    // to delete the current markers on the map witout loading the map again
+    clearMarkers();
 
-    self.map = new google.maps.Map(document.getElementById('map'), {
-      center: self.location,
-      zoom: 14
-    });
-
-    self.infowindow = new google.maps.InfoWindow();
-    self.service = new google.maps.places.PlacesService(self.map);
+    // self.map = new google.maps.Map(document.getElementById('map'), {
+    //   center: self.location,
+    //   zoom: 14
+    // });
 
     var request = {
       location: self.location,
-      radius: 1000,
-      type: [self.lookUp]
+      radius: 1500,
+      type: [type]
     };
 
     self.service.nearbySearch(request, callbackFilter);
   };
 
+  // callback funciton to the filter function. Takes the result as an array
   function callbackFilter(results, status) {
-  if (status == google.maps.places.PlacesServiceStatus.OK) {
-    for (var i = 0; i < results.length; i++) {
-      var place = results[i];
-      createMarker(results[i]);
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      for (var i = 0; i < results.length; i++) {
+        var place = results[i];
+        createMarker(results[i]);
+      }
     }
+  } //end callbackFilter
+
+  // Sets the map on all markers in the array.
+  function setMapOnAll(map) {
+    for (var i = 0; i < self.markers.length; i++) {
+      self.markers[i].setMap(map);
+    }
+  } //end setMapOnAll
+
+  // Removes the markers from the map, but keeps them in the array.
+  function clearMarkers() {
+    setMapOnAll(null);
   }
-}
 
 
 } //end MapViewModel
