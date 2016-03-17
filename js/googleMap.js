@@ -1,20 +1,5 @@
-// the data for the map
-function MapData(initialType) {
-  var self = this;
-  self.type = ko.observable(initialType)
-
-};
-
-// Overall viewmodel for the map with a init function
-function MapViewModel() {
-  var self = this;
-  // This example requires the Places library. Include the libraries=places
-  // parameter when you first load the API. For example:
-  // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
-  self.map;
-  self.infowindow;
-  self.initPlaces = [
+// the initial places
+var initialPlaces = [
   {name: "Fischers Fritz", placeId: "ChIJN-CrHttRqEcRW8WVxZ0PUDk", type: "restaurant"},
   {name: "Lutter & Wegner", placeId: "ChIJn3aH2MtRqEcRFCq5E46U1Zs", type: "restaurant"},
   {name: "Maritim Hotel Berlin", placeId: "ChIJVW_VXbRRqEcROfZizUmpRGA", type: "hotel"},
@@ -25,6 +10,31 @@ function MapViewModel() {
   {name: "Kaiser-Wilhelm-Gedächtnis-Kirche", placeId: "ChIJd2v8Cf9QqEcRnLCe4snacBA", type: "church"},
   {name: "Gedenkstätte Berliner Mauer", placeId: "ChIJZ0KxF_JRqEcRrLHB-4r-U-o", type: "establishment"}
   ];
+
+// the data for the map
+function MapData(initialData) {
+  var self = this;
+  self.placeId = initialData.placeId;
+  self.name = ko.observable(initialData.name);
+};
+
+// Overall viewmodel for the map with a init function
+function MapViewModel() {
+  var self = this;
+
+  self.placeList = ko.observableArray([]);
+
+  initialPlaces.forEach(function(placeItem) {
+    self.placeList.push(new MapData(placeItem))
+  });
+
+  // This example requires the Places library. Include the libraries=places
+  // parameter when you first load the API. For example:
+  // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+
+  self.map;
+  self.infowindow;
+  self.service;
 
   // available types to search for in the filter menu preferably from the server
   self.availableTypes = [
@@ -46,10 +56,10 @@ function MapViewModel() {
     });
 
     self.infowindow = new google.maps.InfoWindow();
-    var service = new google.maps.places.PlacesService(self.map);
+    self.service = new google.maps.places.PlacesService(self.map);
 
-    for (var i = 0; i < self.initPlaces.length; i++) {
-      service.getDetails(self.initPlaces[i], callback);
+    for (var i = 0; i < self.placeList().length; i++) {
+      self.service.getDetails(self.placeList()[i], callback);
     }
   } //end initMap
 
