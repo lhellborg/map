@@ -33,7 +33,12 @@
     return function callback(place, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         myPlace.marker = createMarker(place);
+      } else if (status === google.maps.places.PlacesServiceStatus.ERROR){
+        $("#map").append("<p>There was a problem contacting the Google servers</p>");
+      } else {
+        $("#map").append("<p>Sorry, could no get the map</p>");
       }
+
     } //end callback
   } // end makeCallback
 
@@ -72,7 +77,7 @@
     });
   }; //end toggleBounce
 
-    // when an list item is clicked make an infoWindow in the map
+    // when an list item is clicked make an infoWindow in the map and set the mapMarker green and make it bounce
   model.currentPlace.subscribe(function(selectedPlace) {
     infowindow.setContent('<div><strong>' + selectedPlace.name + '</strong><br>' +
         '<img id="icon" src=' + selectedPlace.icon + '></div>');
@@ -83,7 +88,7 @@
   });
 
 
-  //makes the map markers bounce
+  //makes the map markers bounce for a list item
   var toggleBounceList = function(marker) {
     if (marker.getAnimation()) {
      marker.setAnimation(null);
@@ -116,6 +121,12 @@
         place.marker = createMarker(results[i]);
         model.placeList.push(new MapData(place));
       }
+    } else if (status == google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+      var nothingFound = {name: "Sorry, no result found, try another one", icon: "http://www.pic4ever.com/images/kaffeetrinker_2.gif"};
+      model.placeList.push(new MapData(nothingFound));
+    } else {
+      var nothingFound = {name: "Sorry, somthing went wrong, try again later", icon: "http://www.pic4ever.com/images/kaffeetrinker_2.gif"};
+      model.placeList.push(new MapData(nothingFound));
     }
   } //end callbackFilter
 
