@@ -50,6 +50,7 @@
     return marker;
   } //end createMarker
 
+  //upon click on a mapmarker the infoWindow appear and the mapMarker is turned green
   var addPins = function(place, marker) {
     google.maps.event.addListener(marker, 'click', function() {
       infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
@@ -63,7 +64,7 @@
   //makes the map markers bounce
   var toggleBounce = function(marker) {
     google.maps.event.addListener(marker, 'click', function() {
-      if (marker.getAnimation() !== null) {
+      if (marker.getAnimation()) {
        marker.setAnimation(null);
       } else {
         marker.setAnimation(google.maps.Animation.BOUNCE);
@@ -76,4 +77,57 @@
     infowindow.setContent('<div><strong>' + selectedPlace.name + '</strong><br>' +
         '<img id="icon" src=' + selectedPlace.icon + '></div>');
     infowindow.open(self.map, selectedPlace.marker);
+    //Change the marker icon
+    selectedPlace.marker.setIcon('https://www.google.com/mapfiles/marker_green.png');
+    toggleBounceList(selectedPlace.marker);
   });
+
+
+  //makes the map markers bounce
+  var toggleBounceList = function(marker) {
+    if (marker.getAnimation()) {
+     marker.setAnimation(null);
+    } else {
+      marker.setAnimation(google.maps.Animation.BOUNCE);
+    }
+  }; //end toggleBounce
+
+    // A Places Nearby search is initiated with a call to the PlacesService's nearbySearch() method,
+    // which will return an array of PlaceResult objects.
+    // A Nearby Search lets you search for places within a specified area by keyword or type
+  function filter(type) {
+    // to delete the current markers on the map witout loading the map again
+    clearMarkers();
+
+    var request = {
+      location: loc,
+      radius: 1500,
+      type: [type]
+    };
+
+    service.nearbySearch(request, callbackFilter);
+  }; //end filter
+
+  // callback function to the filter function. Takes the result as an array
+  function callbackFilter(results, status) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      for (var i = 0; i < results.length; i++) {
+        var place = results[i];
+        place.marker = createMarker(results[i]);
+        model.placeList.push(new MapData(place));
+      }
+    }
+  } //end callbackFilter
+
+  // Sets the map on all markers in the array.
+  function setMapOnAll(map) {
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(map);
+    }
+  } //end setMapOnAll
+
+  // Removes the markers from the map, and delete them from the marker array.
+  function clearMarkers() {
+    setMapOnAll(null);
+    markers = [];
+  }// end clearMarkers
