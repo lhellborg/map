@@ -1,6 +1,4 @@
 
-
-
 // the data for the map
 var MapData = function(initialData) {
   var self = this;

@@ -1,3 +1,7 @@
+
+//the initial location
+var loc = {lat: 52.51, lng: 13.38};
+
 // the initial places
 var initialPlaces = [
   {name: "Fischers Fritz", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", place_id: "ChIJN-CrHttRqEcRW8WVxZ0PUDk", type: "restaurant", formatted_address: "Charlottenstraße 49, 10117 Berlin, Tyskland"},

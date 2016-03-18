@@ -36,7 +36,7 @@
       } else if (status === google.maps.places.PlacesServiceStatus.ERROR){
         $("#map").append("<p>There was a problem contacting the Google servers</p>");
       } else {
-        $("#map").append("<p>Sorry, could no get the map</p>");
+        $("#map").append("<p>Sorry, could not get the map</p>");
       }
 
     } //end callback
