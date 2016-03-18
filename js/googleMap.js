@@ -1,15 +1,4 @@
-// the initial places
-var initialPlaces = [
-  {name: "Fischers Fritz", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", place_id: "ChIJN-CrHttRqEcRW8WVxZ0PUDk", type: "restaurant", formatted_address: "Charlottenstraße 49, 10117 Berlin, Tyskland"},
-  {name: "Lutter & Wegner", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", place_id: "ChIJn3aH2MtRqEcRFCq5E46U1Zs", type: "restaurant", formatted_address: "Weinhaus Huth, Alte Potsdamer Str. 5, 10785 Berlin, Tyskland"},
-  {name: "Maritim Hotel Berlin", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/lodging-71.png", place_id: "ChIJVW_VXbRRqEcROfZizUmpRGA", type: "hotel", formatted_address: "Stauffenbergstraße 26, 10785 Berlin, Tyskland"},
-  {name: "Brandenburger Tor", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png", place_id: "ChIJiQnyVcZRqEcRY0xnhE77uyY", type: "establishment", formatted_address: "Pariser Platz, 10117 Berlin, Tyskland"},
-  {name: "Reichstagsgebäude", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/civic_building-71.png", place_id: "ChIJbVDuQcdRqEcR5X3xq9NSG2Q", type: "establishment", formatted_address: "Platz der Republik 1, 11011 Berlin, Tyskland"},
-  {name: "Gendarmenmarkt", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/generic_business-71.png", place_id: "ChIJ4ZsybtpRqEcRkDdXJvRC7Wk", type: "establishment", formatted_address: "Gendarmenmarkt, 10117 Berlin, Tyskland"},
-  {name: "Deutscher Dom", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/worship_general-71.png", place_id: "ChIJ4ZsybtpRqEcRqBX6VAnUoAw", type: "church", formatted_address: "Gendarmenmarkt 1-2, 10117 Berlin, Tyskland"},
-  {name: "Kaiser-Wilhelm-Gedächtnis-Kirche", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/worship_general-71.png", place_id: "ChIJd2v8Cf9QqEcRnLCe4snacBA", type: "church", formatted_address: "Breitscheidplatz, 10789 Berlin, Tyskland"},
-  {name: "Gedenkstätte Berliner Mauer", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/generic_recreational-71.png", place_id: "ChIJZ0KxF_JRqEcRrLHB-4r-U-o", type: "establishment", formatted_address: "Bernauer Str. 111, 13355 Berlin, Tyskland"}
-];
+
 
 
 // the data for the map
@@ -83,8 +72,10 @@ function MapViewModel() {
       position: place.geometry.location
     });
     //push the marker to the markers array to ba able to take them away before loading new markers
+
     self.markers.push(marker);
     addPins(place, marker);
+    toggleBounce(marker);
     return marker;
   } //end createMarker
 
@@ -93,8 +84,21 @@ function MapViewModel() {
       self.infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
         '<img id="icon" src=' + place.icon + '></div>');
       self.infowindow.open(self.map, this);
+      //Change the marker icon
+      this.setIcon('https://www.google.com/mapfiles/marker_green.png');
     });
   };
+
+  //makes the map markers bounce
+  toggleBounce = function(marker) {
+    google.maps.event.addListener(marker, 'click', function() {
+      if (marker.getAnimation() !== null) {
+       marker.setAnimation(null);
+      } else {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+      }
+    });
+  }; //end toggleBounce
 
   // the list of types to be filtered
   self.typeList = ko.observableArray([]);
