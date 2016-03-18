@@ -1,4 +1,4 @@
-  // This example requires the Places library. Include the libraries=places
+  // Tƒhis example requires the Places library. Include the libraries=places
   // parameter when you first load the API. For example:
   // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
 
@@ -8,12 +8,14 @@
   var service;
   var markers = [];
 
+  var loc = {lat: 52.51, lng: 13.38};
+
   // Puts a map in the map div, with specified lat and long
-  initMap = function() {
-  var location = {lat: 52.51, lng: 13.38};
+ var initMap = function() {
+
 
   map = new google.maps.Map(document.getElementById('map'), {
-    center: location,
+    center: loc,
     zoom: 13
   });
 
@@ -48,7 +50,7 @@
     return marker;
   } //end createMarker
 
-  addPins = function(place, marker) {
+  var addPins = function(place, marker) {
     google.maps.event.addListener(marker, 'click', function() {
       infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
         '<img id="icon" src=' + place.icon + '></div>');
@@ -59,7 +61,7 @@
   };
 
   //makes the map markers bounce
-  toggleBounce = function(marker) {
+  var toggleBounce = function(marker) {
     google.maps.event.addListener(marker, 'click', function() {
       if (marker.getAnimation() !== null) {
        marker.setAnimation(null);

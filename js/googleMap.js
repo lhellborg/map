@@ -51,8 +51,6 @@ function MapViewModel() {
   self.currentPlace = ko.observable();
 
 
-
-
     // A Places Nearby search is initiated with a call to the PlacesService's nearbySearch() method,
     // which will return an array of PlaceResult objects.
     // A Nearby Search lets you search for places within a specified area by keyword or type
@@ -66,12 +64,12 @@ function MapViewModel() {
     // });
 
     var request = {
-      location: self.location,
+      location: loc,
       radius: 1500,
       type: [type]
     };
 
-    self.service.nearbySearch(request, callbackFilter);
+    service.nearbySearch(request, callbackFilter);
   };
 
   // callback function to the filter function. Takes the result as an array
@@ -87,15 +85,15 @@ function MapViewModel() {
 
   // Sets the map on all markers in the array.
   function setMapOnAll(map) {
-    for (var i = 0; i < self.markers.length; i++) {
-      self.markers[i].setMap(map);
+    for (var i = 0; i < markers.length; i++) {
+      markers[i].setMap(map);
     }
   } //end setMapOnAll
 
   // Removes the markers from the map, and delete them from the marker array.
   function clearMarkers() {
     setMapOnAll(null);
-    self.markers = [];
+    markers = [];
   }
 
 
