@@ -9,9 +9,10 @@ var MapData = function(initialData) {
   self.type = initialData.type;
   self.formatted_address = initialData.formatted_address;
   self.icon = initialData.icon;
-  self.marker=initialData.marker;
+  self.marker = initialData.marker;
 };
 
+//the data for the type options
 var Types = function(dataTypes) {
   var self = this;
   self.name = dataTypes.name;
@@ -28,77 +29,6 @@ function MapViewModel() {
     self.placeList.push(new MapData(placeItem));
   });
 
-
-  // This example requires the Places library. Include the libraries=places
-  // parameter when you first load the API. For example:
-  // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-
-  self.map;
-  self.infowindow;
-  self.service;
-  self.location = {lat: 52.51, lng: 13.38};
-  self.markers = [];
-
-
-  // Puts a map in the map div, with specified lat and long
-  self.initMap=function() {
-
-    self.map = new google.maps.Map(document.getElementById('map'), {
-      center: self.location,
-      zoom: 13
-    });
-
-    self.infowindow = new google.maps.InfoWindow();
-    self.service = new google.maps.places.PlacesService(self.map);
-
-    for (var i = 0; i < self.placeList().length; i++) {
-      var onePlace = self.placeList()[i];
-      //for each onePlace we will add the corresponding marker with an "iffy" callback
-      self.service.getDetails(onePlace, makeCallback(onePlace));
-    }
-  } //end initMap
-
-  function makeCallback(myPlace) {
-    return function callback(place, status) {
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        myPlace.marker = createMarker(place);
-      }
-    } //end callback
-  } // end makeCallback
-
-  function createMarker(place) {
-    var marker = new google.maps.Marker({
-      map: self.map,
-      position: place.geometry.location
-    });
-    //push the marker to the markers array to ba able to take them away before loading new markers
-
-    self.markers.push(marker);
-    addPins(place, marker);
-    toggleBounce(marker);
-    return marker;
-  } //end createMarker
-
-  addPins = function(place, marker) {
-    google.maps.event.addListener(marker, 'click', function() {
-      self.infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
-        '<img id="icon" src=' + place.icon + '></div>');
-      self.infowindow.open(self.map, this);
-      //Change the marker icon
-      this.setIcon('https://www.google.com/mapfiles/marker_green.png');
-    });
-  };
-
-  //makes the map markers bounce
-  toggleBounce = function(marker) {
-    google.maps.event.addListener(marker, 'click', function() {
-      if (marker.getAnimation() !== null) {
-       marker.setAnimation(null);
-      } else {
-        marker.setAnimation(google.maps.Animation.BOUNCE);
-      }
-    });
-  }; //end toggleBounce
 
   // the list of types to be filtered
   self.typeList = ko.observableArray([]);
@@ -120,12 +50,7 @@ function MapViewModel() {
   //the clicked list item
   self.currentPlace = ko.observable();
 
-  // when an list item is clicked make an infoWindow in the map
-  self.currentPlace.subscribe(function(selectedPlace) {
-    self.infowindow.setContent('<div><strong>' + selectedPlace.name + '</strong><br>' +
-        '<img id="icon" src=' + selectedPlace.icon + '></div>');
-    self.infowindow.open(self.map, selectedPlace.marker);
-  });
+
 
 
     // A Places Nearby search is initiated with a call to the PlacesService's nearbySearch() method,
