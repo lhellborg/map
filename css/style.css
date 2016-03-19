@@ -15,6 +15,13 @@ body {
   width: 100%;
 }
 
+/*to make the mapReplacements fill out all the space in the element*/
+#mapReplace{
+  height: calc(100vh - 170px);
+  width: 100%;
+}
+
+
 /*
  * Global add-ons
  */
