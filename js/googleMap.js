@@ -36,6 +36,7 @@ function MapViewModel() {
     self.typeList.push(new Types(typeItem))
   });
 
+  //the selected type from the filter
   self.selectedType = ko.observable();
   // filter the markers on the map with the selectedType and
   // update the placeList with the new places
@@ -47,6 +48,16 @@ function MapViewModel() {
 
   //the clicked list item
   self.currentPlace = ko.observable();
+
+  //the user input from special place?
+  self.specialPlace = ko.observable();
+
+  self.specialPlace.subscribe(function(specialItem) {
+    console.log(specialItem);
+      //empty the self.placeList array
+    self.placeList().length = 0;
+    specialSearch(specialItem);
+  });
 
 } //end MapViewModel
 

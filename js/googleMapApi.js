@@ -113,6 +113,19 @@
     service.nearbySearch(request, callbackFilter);
   }; //end filter
 
+  function specialSearch(search) {
+    // to delete the current markers on the map witout loading the map again
+    clearMarkers();
+
+    var request = {
+      location: loc,
+      radius: 1000,
+      query: search
+    };
+
+    service.textSearch(request, callbackFilter);
+  }; //end filter
+
   // callback function to the filter function. Takes the result as an array
   function callbackFilter(results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
