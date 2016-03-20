@@ -59,10 +59,12 @@
   var addPins = function(place, marker) {
     google.maps.event.addListener(marker, 'click', function() {
       infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
-        '<img id="icon" src=' + place.icon + '></div>');
-      infowindow.open(self.map, this);
+        '<img id="icon" src=' + place.icon + '></div><div class=' +
+        "wiki-container" + '><ul class=' + "wiki-links" + '></ul></div>');
+      wikiRequest(place);
       //Change the marker icon
       this.setIcon('https://www.google.com/mapfiles/marker_green.png');
+      infowindow.open(self.map, this);
     });
   };
 
@@ -80,7 +82,9 @@
     // when an list item is clicked make an infoWindow in the map and set the mapMarker green and make it bounce
   model.currentPlace.subscribe(function(selectedPlace) {
     infowindow.setContent('<div><strong>' + selectedPlace.name + '</strong><br>' +
-        '<img id="icon" src=' + selectedPlace.icon + '></div>');
+        '<img id="icon" src=' + selectedPlace.icon + '></div><div class=' +
+        "wiki-container" + '><ul class=' + "wiki-links" + '></ul></div>');
+      wikiRequest(selectedPlace);
     infowindow.open(self.map, selectedPlace.marker);
     //Change the marker icon
     selectedPlace.marker.setIcon('https://www.google.com/mapfiles/marker_green.png');

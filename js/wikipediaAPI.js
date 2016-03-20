@@ -1,10 +1,13 @@
+
+var wikiRequest = function(place) {
     //Wikipedia JSON-P request
-    var wikiURL = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" + "fischers fritz" + "&prop=info&inprop=url&rvprop=content&format=json&callback=wikiCallback"
+    var wikiURL = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" +
+    place.name + "&prop=info&inprop=url&rvprop=content&format=json&callback=wikiCallback"
 
     //error handling when running for too long
     var wikiRequestTimeout = setTimeout(function() {
         $(".wiki-links").text("Sorry, no wikipedia page could be found");
-    }, 5000);
+    }, 2000);
 
     $.ajax({
         url: wikiURL,
@@ -24,4 +27,4 @@
 
         }
     });
-
+};
