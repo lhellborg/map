@@ -37,7 +37,6 @@ function MapViewModel() {
   // filter the markers on the map with the selectedTypes and
   // update the placeList with the new places
   self.selectedTypes.subscribe(function(newTypes) {
-    console.log(self.selectedTypes());
     var typeArray = [];
     newTypes.forEach(function(newType){
       typeArray.push(newType.type);
@@ -53,7 +52,8 @@ function MapViewModel() {
   self.specialPlace = ko.observable(storedSpecialItem); //use the stored value in locastorage if available
 
 
-  self.specialPlace.subscribe(function(specialItem) { //whenever something is written in the special search input window
+  self.specialPlace.subscribe(function(specialItem) {
+  console.log(specialItem)//whenever something is written in the special search input window
     self.placeList().length = 0; //empty the self.placeList array
     specialSearch(specialItem); //call the function specialSearch with the variable specialItem
     localStorage.setItem('specialItem', specialItem); //set the new special search item to localStorage
