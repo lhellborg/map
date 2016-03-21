@@ -14,13 +14,13 @@
  var initMap = function() {
 
 
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: loc,
-    zoom: 13
-  });
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: loc,
+      zoom: 13
+    });
 
-  infowindow = new google.maps.InfoWindow();
-  service = new google.maps.places.PlacesService(map);
+    infowindow = new google.maps.InfoWindow();
+    service = new google.maps.places.PlacesService(map);
 
     for (var i = 0; i < model.placeList().length; i++) {
       var onePlace = model.placeList()[i];
@@ -61,7 +61,7 @@
       infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
         '<img id="icon" src=' + place.icon + '></div><div class=' +
         "wiki-container" + '><ul class=' + "wiki-links" + '></ul></div>');
-      wikiRequest(place);
+      wikiRequest(place.name);
       //Change the marker icon
       this.setIcon('https://www.google.com/mapfiles/marker_green.png');
       infowindow.open(self.map, this);
@@ -84,7 +84,7 @@
     infowindow.setContent('<div><strong>' + selectedPlace.name + '</strong><br>' +
         '<img id="icon" src=' + selectedPlace.icon + '></div><div class=' +
         "wiki-container" + '><ul class=' + "wiki-links" + '></ul></div>');
-      wikiRequest(selectedPlace);
+      wikiRequest(selectedPlace.name);
     infowindow.open(self.map, selectedPlace.marker);
     //Change the marker icon
     selectedPlace.marker.setIcon('https://www.google.com/mapfiles/marker_green.png');
@@ -101,9 +101,9 @@
     }
   }; //end toggleBounce
 
-    // A Places Nearby search is initiated with a call to the PlacesService's nearbySearch() method,
-    // which will return an array of PlaceResult objects.
-    // A Nearby Search lets you search for places within a specified area by keyword or type
+
+  // filter the markers on the map with the selectedType and
+  // update the placeList with the new places
   function filter(type) {
     // to delete the current markers on the map witout loading the map again
     clearMarkers();
@@ -114,7 +114,7 @@
       type: [type]
     };
 
-    service.nearbySearch(request, callbackFilter);
+    service.nearbySearch(request, callbackFilter); // A Nearby Search lets you search for places within a specified area by keyword or type
   }; //end filter
 
   function specialSearch(search) {
@@ -142,7 +142,7 @@
       var nothingFound = {name: "Sorry, no result found, try another one", icon: "http://www.pic4ever.com/images/kaffeetrinker_2.gif"};
       model.placeList.push(new MapData(nothingFound));
     } else {
-      var nothingFound = {name: "Sorry, somthing went wrong, try again later", icon: "http://www.pic4ever.com/images/kaffeetrinker_2.gif"};
+      var nothingFound = {name: "Sorry, something went wrong, try again later", icon: "http://www.pic4ever.com/images/kaffeetrinker_2.gif"};
       model.placeList.push(new MapData(nothingFound));
     }
   } //end callbackFilter

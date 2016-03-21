@@ -1,7 +1,4 @@
 
-//the initial location
-var loc = {lat: 52.51, lng: 13.38};
-
 // the initial places
 var initialPlaces = [
   {name: "Fischers Fritz", icon: "https://maps.gstatic.com/mapfiles/place_api/icons/restaurant-71.png", place_id: "ChIJN-CrHttRqEcRW8WVxZ0PUDk", type: "restaurant", formatted_address: "Charlottenstraße 49, 10117 Berlin, Tyskland"},
@@ -26,7 +23,7 @@ var availableTypes = [
 {name: "Art gallery", type: "art_gallery"},
 {name: "ATM", type: "atm"},
 {name: "Bakery", type: "bakery"},
-{name: "Bank", type: "bank,"},
+{name: "Bank", type: "bank"},
 {name: "Bar", type: "bar"},
 {name: "Beauty salon", type: "beauty_salon"},
 {name: "Bicycle store", type: "bicycle_store"},

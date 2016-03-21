@@ -1,8 +1,8 @@
 
-var wikiRequest = function(place) {
+var wikiRequest = function(name) {
     //Wikipedia JSON-P request
     var wikiURL = "https://en.wikipedia.org/w/api.php?action=opensearch&search=" +
-    place.name + "&prop=info&inprop=url&rvprop=content&format=json&callback=wikiCallback"
+    name + "&prop=info&inprop=url&rvprop=content&format=json&callback=wikiCallback"
 
     //error handling when running for too long
     var wikiRequestTimeout = setTimeout(function() {
