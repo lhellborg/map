@@ -41,9 +41,11 @@
   } // end makeCallback
 
   function createMarker(place) {
+    console.log(place);
     var marker = new google.maps.Marker({
       map: map,
-      position: place.geometry.location
+      position: place.geometry.location,
+      icon: place.icon //show a mapMarker depending on the type of place
     });
 
     //push the marker to the markers array to ba able to take them away before loading new markers
