@@ -1,14 +1,12 @@
-  // Tƒhis example requires the Places library. Include the libraries=places
-  // parameter when you first load the API. For example:
-  // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
+//google map API
 
 
-  var map;
-  var infowindow;
-  var service;
-  var markers = [];
+  var map; //google map
+  var infowindow; //the window shown with information about a place
+  var service; //the google API service
+  var markers = []; //an array for hte shown markers, used to clear the map before other selections
 
-  var loc = {lat: 52.51, lng: 13.38};
+  var loc = {lat: 52.51, lng: 13.38}; //location fo Berlin
 
   // Puts a map in the map div, with specified lat and long
  var initMap = function() {
@@ -102,7 +100,7 @@
   }; //end toggleBounce
 
 
-  // filter the markers on the map with the selectedType and
+  // filter the markers on the map with the selectedTypes and
   // update the placeList with the new places
   function filter(type) {
     // to delete the current markers on the map witout loading the map again
@@ -111,7 +109,7 @@
     var request = {
       location: loc,
       radius: 1500,
-      type: [type]
+      type: type
     };
 
     service.nearbySearch(request, callbackFilter); // A Nearby Search lets you search for places within a specified area by keyword or type

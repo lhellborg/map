@@ -12,7 +12,6 @@ var wikiRequest = function(name) {
     $.ajax({
         url: wikiURL,
         dataType: 'jsonp',
-        //jsonp: "callback",
         success: function(data) {
 
             for (i=0; i < data[3].length; i++) {

@@ -63,7 +63,7 @@
 
         <div class="col-xs-5 col-sm-3 col-md-2 sidebar">
           <form >
-            <select id="filteringList" class="form-control" data-bind="options: availableTypes, optionsText: 'name', value: selectedType, optionsCaption: 'Filter...'"></select>
+            <select id="filteringList" class="form-control" data-bind="options: availableTypes, optionsText: 'name', selectedOptions: selectedTypes, optionsCaption: 'Filter...'" ></select>
           </form>
           <ul class="nav nav-sidebar" data-bind="foreach: placeList">
             <li ><a href="#" data-bind="text: name, click: $parent.currentPlace"></a></li>
@@ -74,9 +74,7 @@
         <div class="col-xs-7 col-xs-offset-5 col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h3 class="page-header">Berlin</h3>
           <div class="mainWindow" id="map"></div>
-          <div class="mainWindow hidden" id="showWeather">
-            <div class="wheater-container"></div>
-          </div>
+          <div class="mainWindow hidden" id="showWeather"></div>
           <footer>
             <p>Made by: Linda Hellborg, Contact: <a href="linda.hellborg@gmail.com">Linda</a>.</p>
           </footer>
@@ -95,6 +93,7 @@
     <script type="text/javascript" src="js/navbarHeader.js"></script>
     <script type="text/javascript" src="js/wikipediaAPI.js"></script>
     <script type="text/javascript" src="js/localStorage.js"></script>
+    <script type="text/javascript" src="js/shortkey.js"></script>
     <script type="text/javascript" src="js/googleMap.js"></script>
      <script type="text/javascript" src="js/googleMapApi.js"></script>
     <!-- jquery with the bottstrap theme-->

@@ -30,14 +30,20 @@ function MapViewModel() {
     self.typeList.push(typeItem) //all items are put in the typelist
   });
 
+  //the selected type from the filter, could be more than one,
+  //set up for multiple selections but I found the interface not userfriendly so I made it single selection
+  self.selectedTypes = ko.observableArray();
 
-  self.selectedType = ko.observable(); //the selected type from the filter
-
-  // filter the markers on the map with the selectedType and
+  // filter the markers on the map with the selectedTypes and
   // update the placeList with the new places
-  self.selectedType.subscribe(function(newType) {
+  self.selectedTypes.subscribe(function(newTypes) {
+    console.log(self.selectedTypes());
+    var typeArray = [];
+    newTypes.forEach(function(newType){
+      typeArray.push(newType.type);
+    });
     self.placeList().length = 0; //empty the self.placeList array
-    filter(newType.type); //filter the mapMarkers and the wiew list to the selected type
+    filter(typeArray); //filter the mapMarkers and the wiew list to the selected type
   });
 
 

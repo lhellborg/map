@@ -12,7 +12,7 @@ function storageAvailable(type) {
 	}
 };
 
-//give a message to the user if localStorage is available or not
+//give a message to the user if localStorage is available or not only shown when width is more than 450 px
 if (storageAvailable('localStorage')) {
 	$("footer").prepend("<p>The text you put in special place will be saved for next time</p>");
 }

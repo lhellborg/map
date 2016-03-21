@@ -1,9 +1,4 @@
-//when clicked the weather of Berlin will be shown in the mainWindow
-$("#weathe").click(function() {
-	$("#mainWindow").append( '<iframe class=' + "mapReplace" + ' src=' + "http://www.yr.no/place/Germany/Berlin/Berlin/" + '></iframe>');
-	$(".mapReplace").append('<p>Your browser does not support iframes.</p>')
-});
-
+//clickable navbar header
 $('#mapButton').on('click', function() {
 	$('.change').each(function() {
 		$(this).removeClass('active'); //take away the active class on any change item
@@ -26,6 +21,7 @@ $('#weatherButton').on('click', function() {
 	$("#showWeather").removeClass('hidden') //remove hidden class on the element to be shown in hte main window
 });
 
+//taken form tutorial How to Build a Yahoo! Weather "Hello World" Application in JavaScript by Chris Wood.
 function getWeather() {
     var location = "berlin";
 
@@ -38,7 +34,6 @@ function getWeather() {
         } else {
             $('#showWeather').html('<h2>' + data.query.results.channel.item.title + '</h2>' +
                 data.query.results.channel.item.description)
-            $('.wheater-container').show();
         }
 
     });
