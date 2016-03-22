@@ -68,8 +68,15 @@ module.exports = function (grunt) {
 
     all: ['Gruntfile.js', 'js/**/*.js']
   },
+
+  jsbeautifier: {
+    files : ["src/**/*.js"],
+    options : {
+    },
+  },
 });
 
+  grunt.loadNpmTasks("grunt-jsbeautifier");
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-htmlmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
