@@ -27,7 +27,7 @@ function MapViewModel() {
 
 
   availableTypes.forEach(function(typeItem) { // noneditable data of types to be filtered
-    self.typeList.push(typeItem) //all items are put in the typelist
+    self.typeList.push(typeItem); //all items are put in the typelist
   });
 
   //the selected type from the filter, could be more than one,

@@ -36,7 +36,7 @@ function makeCallback(myPlace) { //return the original callback function with th
     $("#map").append("<p>Sorry, could not get the map</p>"); //error message for all other errors
   }
 
-  } //end callback
+  }; //end callback
 } // end makeCallback
 
 function createMarker(place) {
@@ -111,7 +111,7 @@ function filter(type) {
   };
 
   service.nearbySearch(request, callbackFilter); // A Nearby Search lets you search for places within a specified area by keyword or type
-}; //end filter
+} //end filter
 
 function specialSearch(search) {
   // to delete the current markers on the map witout loading the map again
@@ -124,7 +124,7 @@ function specialSearch(search) {
   };
 
   service.textSearch(request, callbackFilter);
-}; //end specialSearch
+} //end specialSearch
 
 // callback function to the filter function. Takes the result as an array
 function callbackFilter(results, status) {
@@ -138,20 +138,20 @@ function callbackFilter(results, status) {
     var nothingFound = {name: "Sorry, no result found, try another one", icon: "http://www.pic4ever.com/images/kaffeetrinker_2.gif"};
     model.placeList.push(new MapData(nothingFound));
   } else {
-    var nothingFound = {name: "Sorry, something went wrong, try again later", icon: "http://www.pic4ever.com/images/kaffeetrinker_2.gif"};
-    model.placeList.push(new MapData(nothingFound));
+    var somethingWrong = {name: "Sorry, something went wrong, try again later", icon: "http://www.pic4ever.com/images/kaffeetrinker_2.gif"};
+    model.placeList.push(new MapData(somethingWrong));
   }
-}; //end callbackFilter
+} //end callbackFilter
 
 // Sets the map on all markers in the array.
 function setMapOnAll(map) {
   for (var i = 0; i < markers.length; i++) {
     markers[i].setMap(map);
   }
-}; //end setMapOnAll
+} //end setMapOnAll
 
 // Removes the markers from the map, and delete them from the marker array.
 function clearMarkers() {
   setMapOnAll(null);
   markers = [];
-};// end clearMarkers
+}// end clearMarkers

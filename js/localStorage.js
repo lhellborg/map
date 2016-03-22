@@ -10,7 +10,7 @@ function storageAvailable(type) {
 	catch(e) {
 		return false;
 	}
-};
+}
 
 //give a message to the user if localStorage is available or not, only shown when width is more than 450 px
 if (storageAvailable('localStorage')) {
@@ -18,4 +18,4 @@ if (storageAvailable('localStorage')) {
 }
 else {
 	$("footer").prepend("<p>Sorry, we can't save your special search until next login</p>");
-};
+}

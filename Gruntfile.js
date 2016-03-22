@@ -54,6 +54,7 @@ module.exports = function (grunt) {
       }
     },
 
+  // validate files with JSHInt
   jshint: {
       options: {
       // curly: true,
@@ -65,11 +66,11 @@ module.exports = function (grunt) {
       },
     },
 
-    all: ['Gruntfile.js', '**/*.js']
+    all: ['Gruntfile.js', 'js/**/*.js']
   },
+});
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
-  grunt.registerTask('jshint', ['jshint');
   grunt.loadNpmTasks('grunt-contrib-htmlmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
