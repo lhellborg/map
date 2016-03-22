@@ -17,9 +17,9 @@ var wikiRequest = function(name) {
             for (i=0; i < data[3].length; i++) {
                 var name = data[1][i];
                 var url = data[3][i];
-                $(".wiki-links").append("<li><a href="+  url + ">" + name +  "</a></li>");
+                $(".wiki-links").append("<li><a href="+  url + " target=_blank>" + name +  "</a></li>"); //when clicked on a link a new tab opens
                 if (url != null) {
-                    clearTimeout(wikiRequestTimeout);
+                    clearTimeout(wikiRequestTimeout); //timeOut of the error message is taken away
                 }
             }
 

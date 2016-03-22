@@ -54,7 +54,22 @@ module.exports = function (grunt) {
       }
     },
 
+  jshint: {
+      options: {
+      // curly: true,
+      // eqeqeq: true,
+      // eqnull: true,
+      // browser: true,
+      globals: {
+        jQuery: true
+      },
+    },
 
+    all: ['Gruntfile.js', '**/*.js']
+  },
+
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.registerTask('jshint', ['jshint');
   grunt.loadNpmTasks('grunt-contrib-htmlmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');

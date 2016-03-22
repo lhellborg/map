@@ -6,7 +6,7 @@ var infowindow; //the window shown with information about a place
 var service; //the google API service
 var markers = []; //an array for hte shown markers, used to clear the map before other selections
 
-var loc = {lat: 52.51, lng: 13.38}; //location fo Berlin
+var loc = {lat: 52.51, lng: 13.38}; //location of Berlin
 
 // Puts a map in the map div, with specified lat and long
 var initMap = function() {
@@ -20,21 +20,20 @@ var initMap = function() {
   infowindow = new google.maps.InfoWindow();
   service = new google.maps.places.PlacesService(map);
 
-  for (var i = 0; i < model.placeList().length; i++) {
+  for (var i = 0; i < model.placeList().length; i++) { //placeList is an observable array of MapData objects (onePlace)
     var onePlace = model.placeList()[i];
-    //for each onePlace we will add the corresponding marker with an "iffy" callback
-    service.getDetails(onePlace, makeCallback(onePlace));
+    service.getDetails(onePlace, makeCallback(onePlace)); //for each onePlace we will add the corresponding marker with an "iffy" callback
   }
 }; //end initMap
 
-function makeCallback(myPlace) {
+function makeCallback(myPlace) { //return the original callback function with the marker as a key in the MapData object
   return function callback(place, status) {
   if (status === google.maps.places.PlacesServiceStatus.OK) {
-    myPlace.marker = createMarker(place);
-  } else if (status === google.maps.places.PlacesServiceStatus.ERROR){
+    myPlace.marker = createMarker(place); //create a marker object and put it as a key in the MapData (myPlace) object
+  } else if (status === google.maps.places.PlacesServiceStatus.ERROR){ //error handling when server does not respond
     $("#map").append("<p>There was a problem contacting the Google servers</p>");
   } else {
-    $("#map").append("<p>Sorry, could not get the map</p>");
+    $("#map").append("<p>Sorry, could not get the map</p>"); //error message for all other errors
   }
 
   } //end callback
@@ -53,10 +52,8 @@ function createMarker(place) {
     icon: image //show a mapMarker depending on the type of place
   });
 
-  //push the marker to the markers array to ba able to take them away before loading new markers
-  markers.push(marker);
-  addPins(place, marker);
-  toggleBounce(marker);
+  markers.push(marker); //push the marker to the markers array to ba able to take them away before loading new markers
+  addPins(place, marker); //add map markers
   return marker;
 } //end createMarker
 
@@ -66,33 +63,28 @@ var addPins = function(place, marker) {
   infowindow.setContent('<div><strong>' + place.name + '</strong><br>' +
     '<img id="icon" src=' + place.icon + '></div><div class=' +
     "wiki-container" + '><ul class=' + "wiki-links" + '></ul></div>');
-  wikiRequest(place.name);
-  //Change the marker icon
-  this.setIcon('https://www.google.com/mapfiles/marker_green.png');
+  wikiRequest(place.name); // add links to the wikipedia site for the name bound to the place
+  this.setIcon('https://www.google.com/mapfiles/marker_green.png');  //Change the marker icon to green when clicked. Stays green.
   infowindow.open(self.map, this);
+  toggleBounce(marker); //toggle the map markers between bounce and still
   });
 }; //end addPins
 
-//makes the map markers bounce
+//toggle the map markers to bounce on click
 var toggleBounce = function(marker) {
-  google.maps.event.addListener(marker, 'click', function() {
-    if (marker.getAnimation()) {
-      marker.setAnimation(null);
-    } else {
-      marker.setAnimation(google.maps.Animation.BOUNCE);
-    }
-  });
-}; //end toggleBounce
+  google.maps.event.addListener(marker, 'click', toggleBounceList(marker));
+};
+
 
 // when an list item is clicked make an infoWindow in the map and set the mapMarker green and make it bounce
 model.currentPlace.subscribe(function(selectedPlace) {
   infowindow.setContent('<div><strong>' + selectedPlace.name + '</strong><br>' +
     '<img id="icon" src=' + selectedPlace.icon + '></div><div class=' +
     "wiki-container" + '><ul class=' + "wiki-links" + '></ul></div>');
-  wikiRequest(selectedPlace.name);
+  wikiRequest(selectedPlace.name); // add links to the wikipedia site for the name bound to the place
   infowindow.open(self.map, selectedPlace.marker);
   selectedPlace.marker.setIcon('https://www.google.com/mapfiles/marker_green.png'); //Change the marker icon
-  toggleBounceList(selectedPlace.marker);
+  toggleBounceList(selectedPlace.marker); //toggle the map markers to bounce on click
 });
 
 
