@@ -9,16 +9,6 @@ body {
   width:100%;
 }
 
-/*to make the map fill out all the space in the element*/
-.mainWindow {
-  height: calc(100vh - 170px);
-  width: 100%;
-}
-
-.hidden {
-  display: none;
-}
-
 /*
  * Global add-ons
  */
@@ -79,21 +69,24 @@ body {
 /*
  * Main content
  */
-
 .main {
   padding: 20px;
   bottom: 0;
 }
-/*@media (min-width: 768px) {
-  .main {
-    padding-right: 40px;
-    padding-left: 40px;
-  }
-}*/
+
 .main .page-header {
   margin-top: 0;
 }
 
+/*to make the map fill out all the space in the element*/
+.mainWindow {
+  height: calc(100vh - 170px);
+  width: 100%;
+}
+
+.hidden {
+  display: none;
+}
 
 /*
  * Placeholder dashboard ideas

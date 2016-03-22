@@ -23,20 +23,17 @@ $('#weatherButton').on('click', function() {
 
 //taken form tutorial How to Build a Yahoo! Weather "Hello World" Application in JavaScript by Chris Wood.
 function getWeather() {
-    var location = "berlin";
-
-    $.get('https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="'
-    	+ location + '")&format=json', function (data) {
-        /* Check that a place was found (we'll just grab the first) */
-        if (data.query.results === null) {
-            bootbox.alert("Location not found: " + location + "!");
-
-        } else {
-            $('#showWeather').html('<h2>' + data.query.results.channel.item.title + '</h2>' +
-                data.query.results.channel.item.description)
-        }
-
-    });
+	var location = "berlin";
+	//API request
+	$.get('https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text="'
+		+ location + '")&format=json', function (data) {
+		if (data.query.results === null) {         // Check that a place was found (we'll just grab the first)
+			bootbox.alert("Location not found: " + location + "!"); //error message
+		} else {
+			$('#showWeather').html('<h2>' + data.query.results.channel.item.title + '</h2>' +
+				data.query.results.channel.item.description)
+		}
+	});
 };
 
 getWeather();
