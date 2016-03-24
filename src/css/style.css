@@ -26,6 +26,14 @@ body {
   border: 0;
 }
 
+.navbar-header {
+  display: flex;
+}
+
+#filterCheckbox {
+  margin: 20px;
+}
+
 /*
  * Sidebar
  */
@@ -111,8 +119,15 @@ body {
   height: 20px;
 }
 
-@media (max-width: 450px) {
+@media (max-width: 650px) {
   footer {
+    display: none;
+  }
+  .sidebar {
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+  .collapse {
     display: none;
   }
 }
