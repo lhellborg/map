@@ -57,6 +57,23 @@ function MapViewModel() {
         localStorage.setItem('specialItem', specialItem); //set the new special search item to localStorage
     });
 
+    self.filterInput = ko.observable(); //input from user to filter in existing list
+    self.filterList = ko.computed(function() {
+        self.placeList().forEach(function(onePlace) {
+            console.log(onePlace.name)
+            console.log(self.filterInput())
+            var searchstring = self.filterInput();
+            var string = onePlace.name;
+            var result = string.search(new RegExp(searchstring, "i"))
+            if (result !== -1) {
+                console.log(onePlace)
+                console.log(result)
+            }
+        })
+
+
+    }); //filter through the names in the listView. So only text matches would work. So "berli" would return anything with the word "berli" in the title, which includes "Berlin."
+
 } //end MapViewModel
 
 var model = new MapViewModel();
