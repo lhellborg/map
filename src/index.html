@@ -65,7 +65,8 @@
 				<form>
 					<select id="filteringList" class="form-control" data-bind="options: availableTypes, optionsText: 'name', selectedOptions: selectedTypes, optionsCaption: 'Filter...'"></select>
 				</form>
-				<ul class="nav nav-sidebar" data-bind="foreach: placeList">
+
+				<ul class="nav nav-sidebar" data-bind="foreach: filterList">
 					<li>
 						<a href="#" data-bind="text: name, click: $parent.currentPlace"></a>
 					</li>
