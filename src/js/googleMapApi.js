@@ -153,14 +153,33 @@ function callbackFilter(results, status) {
 } //end callbackFilter
 
 // Sets the map on all markers in the array.
-function setMapOnAll(map) {
-    for (var i = 0; i < markers.length; i++) {
-        markers[i].setMap(map);
+function hideMarkers(currentMarkers) {
+    for (var i = 0; i < currentMarkers.length; i++) {
+        currentMarkers[i].setVisible(false);
     }
 } //end setMapOnAll
 
 // Removes the markers from the map, and delete them from the marker array.
 function clearMarkers() {
-    setMapOnAll(null);
+    var currentMarkers = markers.slice(0);
+    hideMarkers(currentMarkers);
     markers = [];
 } // end clearMarkers
+
+
+model.filterList.subscribe(function(newFilterList) {
+    console.log("change")
+    // to delete the current markers on the map witout loading the map again
+    hideMarkers(markers);
+
+    for (var i = 0; i < newFilterList.length; i++) { //placeList is an observable array of MapData objects (onePlace)
+        var onePlace = newFilterList[i];
+        onePlace.marker.setVisible(true);
+    }
+
+    //clearMarkers funciton will sometimes delete mapMarkers after they have been drawn on the map.
+    // To avoid that I set a timeout function on the newly created markers
+
+})
+
+

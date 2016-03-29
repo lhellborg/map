@@ -63,16 +63,20 @@ function MapViewModel() {
     self.filterList = ko.computed(function() {
         var listArray = [];
         var originList = self.placeList(); //the original list array
+        var searchstring = self.filterInput(); //the user input to filter
+        var regExp = new RegExp(searchstring, "i")
+
         originList.forEach(function(onePlace) {
-            var searchstring = self.filterInput(); //the user input to filter
             var string = onePlace.name; //the name that appears in the list
-            var result = string.search(new RegExp(searchstring, "i")) //an insensitive search in the string for the userinput
+            var result = string.search(regExp) //an insensitive search in the string for the userinput
             if (result !== -1) { //if there is no string match the result will be -1
-                return listArray.push(onePlace); //put all onePlace wich matches filter input in the list
+               listArray.push(onePlace); //put all onePlace wich matches filter input in the list
             }
         })
+        console.log(listArray);
         return listArray
-    }, self.placeList());  //since placeList was defined and used first I kept that
+
+    });  //since placeList was defined and used first I kept that
 
 } //end MapViewModel
 
