@@ -59,7 +59,7 @@ function MapViewModel() {
 
     self.filterInput = ko.observable(); //input from user to filter in existing list
 
-//filter through the names in the listView. So only text matches would work. So "berli" would return anything with the word "berli" in the title, which includes "Berlin."
+    //filter through the names in the listView. So only text matches would work. So "berli" would return anything with the word "berli" in the title, which includes "Berlin."
     self.filterList = ko.computed(function() {
         var listArray = [];
         var originList = self.placeList(); //the original list array
@@ -70,13 +70,13 @@ function MapViewModel() {
             var string = onePlace.name; //the name that appears in the list
             var result = string.search(regExp) //an insensitive search in the string for the userinput
             if (result !== -1) { //if there is no string match the result will be -1
-               listArray.push(onePlace); //put all onePlace wich matches filter input in the list
+                listArray.push(onePlace); //put all onePlace wich matches filter input in the list
             }
         })
         console.log(listArray);
         return listArray
 
-    });  //since placeList was defined and used first I kept that
+    }); //since placeList was defined and used first I kept that
 
 } //end MapViewModel
 

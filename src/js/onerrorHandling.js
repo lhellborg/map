@@ -2,4 +2,3 @@
 function errorFunction() {
     alert('The googleMap could not be loaded.');
 }
-

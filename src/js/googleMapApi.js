@@ -169,7 +169,7 @@ function clearMarkers() {
 
 model.filterList.subscribe(function(newFilterList) {
     console.log("change")
-    // to delete the current markers on the map witout loading the map again
+        // to delete the current markers on the map witout loading the map again
     hideMarkers(markers);
 
     for (var i = 0; i < newFilterList.length; i++) { //placeList is an observable array of MapData objects (onePlace)
@@ -181,5 +181,3 @@ model.filterList.subscribe(function(newFilterList) {
     // To avoid that I set a timeout function on the newly created markers
 
 })
-
-
