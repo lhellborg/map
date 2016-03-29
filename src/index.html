@@ -93,6 +93,7 @@
 	<!-- Bootstrap core JavaScript
     ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
+	<script type="text/javascript" src="js/onerrorHandling.min.js"></script>
 	<script type="text/javascript" src="js/data.min.js"></script>
 	<script type="text/javascript" src="js/navbarHeader.min.js"></script>
 	<script type="text/javascript" src="js/wikipediaAPI.min.js"></script>
@@ -107,6 +108,6 @@
 		window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')
 	</script>
 	<!-- googleAPI for retrieving a map-->
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZRYqEuTMs9McreEAC49bUYXBk8el2_ko&libraries=places&callback=initMap" async defer></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZRYqEuTMs9McreEAC49bUYXBk8el2_ko&libraries=places&callback=initMap" async defer onerror="errorFunction()"></script>
 
 </body>
