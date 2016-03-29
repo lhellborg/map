@@ -20,7 +20,11 @@ module.exports = function (grunt) {
           src: ['**/*.js'],
           dest: 'dist',
           ext: '.min.js'
-        }]
+        }],
+        options: {
+          sourceMap: true
+
+        }
       }
     },
 
