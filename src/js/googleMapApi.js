@@ -92,13 +92,12 @@ model.currentPlace.subscribe(function(selectedPlace) {
 
 
 //makes the map markers bounce for a list item
-var toggleBounceList = function(marker) {
-    if (marker.getAnimation()) {
+function toggleBounceList(marker) {
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+    setTimeout(function () {
         marker.setAnimation(null);
-    } else {
-        marker.setAnimation(google.maps.Animation.BOUNCE);
-    }
-}; //end toggleBounce
+    }, 700);
+}; //end toggleBounceList
 
 
 // filter the markers on the map with the selectedTypes and
